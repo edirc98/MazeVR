@@ -1,2 +1,0 @@
-# MazeVR
-Maze Virtual Reality 

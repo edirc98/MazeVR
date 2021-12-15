@@ -6,39 +6,28 @@ public class MazeGenerator : MonoBehaviour
 {
     [Header("Texture Map Design")]
     public Texture2D Map;
-    public Color WallColor;
-    public Color PathColor; 
+    public List<Color> ColorCodes;
 
     [Header("Maze Prefabs")]
-    public GameObject Wall;
-    public GameObject Path; 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //GenerateMazeMap();
-    }
+    public List<GameObject> WallPrefabs;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private GameObject _groundInstance; 
 
     #region FUNCTIONS
     public void GenerateMazeMap()
     {
+        _groundInstance =  Instantiate(WallPrefabs[1], new Vector3(((Map.width-1.0f) / 2.0f), -1.0f, ((Map.height-1.0f) / 2.0f)), Quaternion.identity,transform);
+        _groundInstance.transform.localScale = new Vector3(Map.width, 0.1f, Map.height);
+        _groundInstance.GetComponent<Renderer>().sharedMaterial.mainTextureScale = new Vector2(Map.width, Map.height);
+
         for (int i = 0; i < Map.width; i++)
         {
             for (int j = 0; j < Map.height; j++)
             {
-                if (Map.GetPixel(i, j) == WallColor)
+                Color currentPixelColor = Map.GetPixel(i, j);
+                if (currentPixelColor == ColorCodes[0])
                 {
-
-                    Instantiate(Wall, new Vector3(i, 1, j), Quaternion.identity, transform);
-                }
-                else if (Map.GetPixel(i, j) == PathColor)
-                {
-                    Instantiate(Path, new Vector3(i, 0, j), Quaternion.identity, transform);
+                    Instantiate(WallPrefabs[0], new Vector3(i, 0, j),WallPrefabs[0].transform.rotation,transform);
                 }
             }
         }
