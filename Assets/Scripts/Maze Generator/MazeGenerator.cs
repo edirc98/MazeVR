@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit; 
 
 public class MazeGenerator : MonoBehaviour
 {
@@ -12,14 +13,10 @@ public class MazeGenerator : MonoBehaviour
     public List<GameObject> WallPrefabs;
 
     private GameObject _groundInstance; 
-
     #region FUNCTIONS
     public void GenerateMazeMap()
     {
-        _groundInstance =  Instantiate(WallPrefabs[1], new Vector3(((Map.width-1.0f) / 2.0f), -1.0f, ((Map.height-1.0f) / 2.0f)), Quaternion.identity,transform);
-        _groundInstance.transform.localScale = new Vector3(Map.width, 0.1f, Map.height);
-        _groundInstance.GetComponent<Renderer>().sharedMaterial.mainTextureScale = new Vector2(Map.width, Map.height);
-
+        createMazeGround();
         for (int i = 0; i < Map.width; i++)
         {
             for (int j = 0; j < Map.height; j++)
@@ -45,6 +42,14 @@ public class MazeGenerator : MonoBehaviour
         }
         else Debug.Log("No objects to delete.");
         
+    }
+
+    private void createMazeGround()
+    {
+        _groundInstance = Instantiate(WallPrefabs[1], new Vector3(((Map.width - 1.0f) / 2.0f), -1.0f, ((Map.height - 1.0f) / 2.0f)), Quaternion.identity, transform);
+        _groundInstance.transform.localScale = new Vector3(Map.width, 0.1f, Map.height);
+        _groundInstance.GetComponent<Renderer>().sharedMaterial.mainTextureScale = new Vector2(Map.width, Map.height);
+        _groundInstance.AddComponent<TeleportationArea>();
     }
     #endregion
 
